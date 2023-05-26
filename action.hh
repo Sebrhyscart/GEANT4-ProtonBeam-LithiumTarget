@@ -3,6 +3,8 @@
 
 #include "G4VUserActionInitialization.hh"
 #include "generator.hh"
+#include "run.hh"
+
 
 class MyActionInitialization : public G4VUserActionInitialization
 {
@@ -11,6 +13,7 @@ class MyActionInitialization : public G4VUserActionInitialization
         ~MyActionInitialization();
 
         virtual void Build() const;
+        virtual void BuildForMaster() const;
 };
 
 #endif
