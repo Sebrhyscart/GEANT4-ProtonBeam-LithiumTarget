@@ -14,7 +14,6 @@
 
 int main(int argc, char** argv)
 {
-    
     #ifdef G4MULTITHREADED 
         G4MTRunManager* runManager = new G4MTRunManager();
     #else
@@ -30,7 +29,7 @@ int main(int argc, char** argv)
     runManager->SetUserInitialization(physics);
 
     //G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
-    runManager->SetNumberOfThreads(8);
+    runManager->SetNumberOfThreads(4);
     runManager->Initialize();
 
     G4UIExecutive *ui = new G4UIExecutive(argc, argv); 
@@ -45,8 +44,8 @@ int main(int argc, char** argv)
     UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 0.2 0.2");
     UImanager->ApplyCommand("/vis/drawVolume");
     UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true");
-    UImanager->ApplyCommand("/vis/scene/add/trajectories smooth");
-    UImanager->ApplyCommand("/vis/scene/endOfEventAction accumulate -1");
+    UImanager->ApplyCommand("/vis/scene/add/trajectories");
+    UImanager->ApplyCommand("/vis/scene/endOfEventAction accumulate -1"); ///vis/scene/endOfEventAction accumulate
     UImanager->ApplyCommand("/vis/modeling/trajectories/create/drawByParticleID true");
 
     G4cout << "                                                                  -" << G4endl;

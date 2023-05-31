@@ -38,19 +38,13 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *R0his
 
     G4cout << "Particle: " << particleName << " Pre/Post Energy: " << energy1 << ", " << energy2 << G4endl;
 
-    /*
-    //Method 2: report exactly which photon detectors have detected a photon
-    const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
-    G4int copyNo = touchable->GetCopyNumber(); //returns the detector that has been hit by the detector (this is what we'd see irl)
+    G4int evt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
-    //G4cout << "Detector Number: " << copyNo << G4endl; //print which detectors have been hit by photons
-
-    //Method 3: report the position of the center of each detector each time it detects a photon
-    G4VPhysicalVolume *physVol = touchable->GetVolume();
-    G4ThreeVector posDetector = physVol->GetTranslation();
-
-    //G4cout << "Detector position: " << posDetector << G4endl;
-    */
-
+    G4AnalysisManager *analMan = G4AnalysisManager::Instance();
+    analMan->FillNtupleIColumn(0, evt);
+    analMan->FillNtupleDColumn(1, mass);
+    analMan->FillNtupleDColumn(2, charge);
+    analMan->FillNtupleDColumn(3, mag);
+    analMan->AddNtupleRow(0);
     return true;
 }
