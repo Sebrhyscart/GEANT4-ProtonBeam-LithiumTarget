@@ -6,6 +6,7 @@
 #include "G4VisManager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4Threading.hh" 
 
 #include "construction.hh"
 #include "physics.hh"
@@ -14,7 +15,7 @@
 
 int main(int argc, char** argv)
 {
-    #ifdef G4MULTITHREADED 
+    #ifdef G4MULTITHREADED //run GEANT4 in multithreaded mode if available
         G4MTRunManager* runManager = new G4MTRunManager();
     #else
         G4RunManager *runManager = new G4RunManager();
@@ -24,30 +25,34 @@ int main(int argc, char** argv)
     runManager->SetUserInitialization(new MyPhysicsList()); //Physics List
     runManager->SetUserInitialization(new MyActionInitialization()); //Action initialization
 
-    G4VModularPhysicsList* physics = new QGSP_BERT_HP(); //new
-    physics->RegisterPhysics(new G4DecayPhysics());
-    runManager->SetUserInitialization(physics);
+    G4VModularPhysicsList* physics = new QGSP_BERT_HP(); //Add Hadronic Physics
+    physics->RegisterPhysics(new G4DecayPhysics()); //Add Radioactive Decay Physics
+    runManager->SetUserInitialization(physics); //Finish Initializing the Physics
 
-    //G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
-    runManager->SetNumberOfThreads(4);
-    runManager->Initialize();
+    //G4int numEvents =  runManager->GetCurrentRun()->GetNumberOfEventToBeProcessed();
+    //runManager->SetNumberOfEventsToBeStored(1); //needs multithreading editing??
 
-    G4UIExecutive *ui = new G4UIExecutive(argc, argv); 
+    G4int numThreads = G4Threading::G4GetNumberOfCores();
+    runManager->SetNumberOfThreads(numThreads); //Get and Set the ideal number of threads
+    runManager->Initialize(); //initilize the RunManager
+
+    G4UIExecutive *ui = new G4UIExecutive(argc, argv); //set up UI
 
     G4VisManager *visManager = new G4VisExecutive(); 
     visManager->Initialize();
 
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
 
-    //Run some UI commands automatically
-    UImanager->ApplyCommand("/vis/open OGL");
-    UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 0.2 0.2");
-    UImanager->ApplyCommand("/vis/drawVolume");
-    UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true");
-    UImanager->ApplyCommand("/vis/scene/add/trajectories");
-    UImanager->ApplyCommand("/vis/scene/endOfEventAction accumulate -1"); ///vis/scene/endOfEventAction accumulate
-    UImanager->ApplyCommand("/vis/modeling/trajectories/create/drawByParticleID true");
+    //Initilize UI with commands 
+    UImanager->ApplyCommand("/vis/open OGL"); //open the geometry viewer window
+    UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 0.2 0.2"); //set the perspective
+    UImanager->ApplyCommand("/vis/drawVolume"); //draw the simulation geometryS
+    UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true"); //autorefresh viewer
+    UImanager->ApplyCommand("/vis/scene/add/trajectories"); //draw particle trajectories
+    UImanager->ApplyCommand("/vis/scene/endOfEventAction accumulate -1"); //accumulate all events before displaying
+    UImanager->ApplyCommand("/vis/modeling/trajectories/create/drawByParticleID true"); //draw trajectories in colour by particle type
 
+    //Print ASCII art!
     G4cout << "                                                                  -" << G4endl;
     G4cout << "                                                               -`" << G4endl;
     G4cout << "                                                           &lt;*               ~^." << G4endl;
@@ -73,7 +78,7 @@ int main(int argc, char** argv)
     G4cout << "======================================================================================================" << G4endl;
     G4cout << "                  Geant4 Simulation Written by Sebastian Carter and Jadyn Yaroshuk" << G4endl;
 
-    ui->SessionStart();
+    ui->SessionStart(); //Start the interactive UI
 
     return 0;
 }

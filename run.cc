@@ -1,30 +1,51 @@
 #include "run.hh"
+#include <iostream>
+#include <fstream>
 
-MyRunAction::MyRunAction()
+MyRun::MyRun()
 {}
 
-MyRunAction::~MyRunAction()
+/*
+MyRun::MyRun()
+:fEDep(0.)
+{
+    fEDepScoreID = G4SDManager::GetSDManager()->GetCollectionID("myDet/myEDepScorer");
+}
+*/
+MyRun::~MyRun()
 {}
 
-void MyRunAction::BeginOfRunAction(const G4Run*)
+void MyRun::RecordEvent(const G4Event* event)
 {
-    G4AnalysisManager *analMan = G4AnalysisManager::Instance();
+    G4Run::RecordEvent(event);
+    /*
+    
+    //open up the hits collection
+    //for i in the all of the events (parse through each event)
+    //for each neutron present
+    //report E1, E2, postprocessname (in decending energy to make them in order)
+    //print to csv file
+    G4HCofThisEvent* HCE = event->GetHCofThisEvent();
+    if (HCE) {
+        
+    }
 
-    analMan->OpenFile("output.root");
-
-    analMan->CreateNtuple("Name", "Name");
-    analMan->CreateNtupleIColumn("fEvent");
-    analMan->CreateNtupleDColumn("fMass");
-    analMan->CreateNtupleDColumn("fCharge");
-    analMan->CreateNtupleDColumn("fSpin");
-    analMan->FinishNtuple(0);
-
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  if(HCE) {
+   // This part of the code could be replaced to any kind of access
+   // to hits collections and scores
+   G4THitsMap<G4double>* evtMap = (G4THitsMap<G4double>*)(HCE->GetHC(fEDepScoreID));
+   std::map<G4int,G4double*>::iterator itr = evtMap->GetMap()->begin();
+   for(; itr != evtMap->GetMap()->end(); itr++) { fEDep += *(itr->second); }
+  }
+  G4Run::RecordEvent(evt);
+  */
 }
 
-void MyRunAction::EndOfRunAction(const G4Run*)
+void MyRun::Merge(const G4Run* aRun)
 {
-    G4AnalysisManager *analMan = G4AnalysisManager::Instance();
-
-    analMan->Write();
-    analMan->CloseFile();
-}
+  const MyRun* localRun = static_cast<const MyRun*>(aRun);
+  //fEDep += localRun->fEDep;
+  //code on how to merge the hits
+  G4Run::Merge(aRun);
+} 
