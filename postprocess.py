@@ -4,13 +4,14 @@ import math
 import statistics as stats
 
 def extractData(fileName):
-    path = str(pathlib.Path().resolve())
-    path = path + "\\Release\\"
+    #these 6 lines of code find the directory for the output.csv files, and assign fullFileName to the correct path
+    path = str(pathlib.Path().resolve()) #gets the path to the source directory
+    pathList = path.split("\\")
+    fullFileName = ""
+    for i in range(len(pathList)-1):
+        fullFileName += (str(pathList[i]) + "/") #rebuild the path, not including /source/
+    fullFileName += "Build/Release/" + fileName #replace /source with /build/Release/ since that is where the .csv files are generated
 
-            #C:\\Users\\sebrh\\Desktop\\Geant4\\protonlithium1\\source\\Release\\output0.csv
-    fullFileName = "C:/Users/sebrh/Desktop/Geant4/protonlithium1/build/Release/output0.csv"
-
-    #fullFileName = path + str(fileName)
     with open((fullFileName), newline='') as csvfile: #open the .csv file
 
         particleData = csv.reader(csvfile, delimiter=',') #read the data
@@ -50,7 +51,7 @@ def extractData(fileName):
     
     return numP, numN
 
-def xsCalculator(nFiles):
+def xsCalculator(nFiles, thickness, thickUnit):
 
     numPTotal = 0 #total number of protons in the simulation
     xsMacroList = []
@@ -61,11 +62,11 @@ def xsCalculator(nFiles):
         numP, numN = extractData(fileName) #extract the data from the simulation using the above function
         numPTotal += numP 
 
-        xsMacro = numN / numP #need to include thickness
+        xsMacro = numN / (numP * thickness) #need to include thickness
         xsMacroList.append(xsMacro)
     
     xsMacroAve = stats.fmean(xsMacroList) #the final xs (cross section) calculated is the average over each thread's cross section
-    xsSTD_multithread = stats.stdev(xsMacroList) #calculate the STDev between the results from each thread
-    xsSTD_MC = 1 / math.sqrt(numPTotal) #Monte Carlo simulations in general have a STDev of ~1/sqrt(number of iterations)
+    xsSTD_multithread = stats.stdev(xsMacroList) / thickUnit #calculate the STDev between the results from each thread
+    xsSTD_MC = (1 / math.sqrt(numPTotal)) / thickUnit #Monte Carlo simulations in general have a STDev of ~1/sqrt(number of iterations)
 
     return xsMacroAve, xsSTD_multithread, xsSTD_MC
