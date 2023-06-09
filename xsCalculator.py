@@ -15,6 +15,6 @@ xsMacro, xsSTD_multithread, xsSTD_MC = xsCalculator(numFiles, thickness, thickUn
 #xsSTD_multithread is the standard deviation from compairing the calculated xs (cross section) of each thread
 #xsSTD_MC is an estimate of the standard deviation since a Monte Carlo simulation has STDev of ~1/sqrt(# of iterations)
 
-print("The Macrosopic cross section is: " + str(xsMacro) + " 1/cm")
-print("With thread-estimated standard deviation of: +/-" + str(xsSTD_multithread) + " 1/cm")
-print("And Monte Carlo-estimated standard deviation of: +/-" + str(xsSTD_MC) + " 1/cm")
+print("The Macrosopic Li(p,n) cross section is: " + str(xsMacro) + " [1/cm]")
+print("With thread-estimated standard deviation of: +/-" + str(xsSTD_multithread) + " [1/cm]")
+print("And Monte Carlo-estimated standard deviation of: +/-" + str(xsSTD_MC) + " [1/cm]")

@@ -11,29 +11,12 @@ class MyRun : public G4Run
 
         virtual void RecordEvent(const G4Event*);
         void Merge(const G4Run*);
-        /*
-        inline G4int GetEventNumber() const
-        { return fevt; }
 
-        inline G4String GetParticleName() const
-        { return fParticleName; }
-
-        inline G4double GetPreStepEnergy() const
-        { return fEnergy1; }
-
-        inline G4double GetPostStepEnergy() const
-        { return fEnergy2; }
-
-        inline G4String GetPostProcessName() const
-        { return fPostProcessName}
+        //void SetFastMode(G4bool clippedMode) {fastMode = fastMode};
+        //G4bool GetFastMode() {return fastMode};
 
     private:
-        G4int fevt;
-        G4String fParticleName;
-        G4double fEnergy1;
-        G4double fEnergy2;
-        G4Sting fPostProcessName;
-        */
+        //G4bool fastMode = false;
 };
 
 
