@@ -21,10 +21,6 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *R0his
     G4ParticleDefinition *particle = track->GetDefinition(); //Get particle definition from the track
     G4String particleName = particle->GetParticleName(); //Get name of particle
 
-    if (particleName == "neutron") {
-        G4cout << "ayy its a neutron" << G4endl;
-    }
-
     if (false) { //(MyRun::GetFastMode()) {
 
         //kill all gamma rays (waste of computational resource to track them)
@@ -52,7 +48,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *R0his
     
         }
     }
-    if (false) {
+    if (true) {
         //if not in clippedMode, print all particles to output<n>.csv files, print more information per particle as well
         const G4StepPoint *preStepPoint = aStep->GetPreStepPoint(); //Get point before step
 

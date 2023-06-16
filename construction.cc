@@ -1,14 +1,19 @@
 #include "construction.hh"
 
 MyDetectorConstruction::MyDetectorConstruction()
-{}
+{} 
+
 MyDetectorConstruction::~MyDetectorConstruction()
 {}
 
 G4VPhysicalVolume *MyDetectorConstruction::Construct()
 {
+    //this method defines all of the materials and geometry in the simulation
+    //1, materials and their properties are defined
+    //2, the geometry is defined, and materials assigned to the geometry
+
     //=================================================================================================================================
-    //DEFINEMATERIALS
+    //DEFINE MATERIALS
     G4NistManager *nist = G4NistManager::Instance(); //get materials manager
 
     G4Material *air = nist->FindOrBuildMaterial("G4_AIR"); //Air
@@ -75,16 +80,22 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4VPhysicalVolume *physWorld = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicWorld, "physWorld", 0, false, 0, true);
 
     //Define the tunnel through the concrete shieling box
-    G4double innerRadius = 0.*cm;
+    G4double innerRadius = 0.*cm; //cylinder construction parameters
     G4double outerRadius = RTunnel;
     G4double hz = LCube;
     G4double startAngle = 0.*deg;
     G4double spanningAngle = 360.*deg;
 
     G4Tubs *solidVacuumTunnel = new G4Tubs("solidVacuumTunnel", innerRadius, outerRadius, hz, startAngle, spanningAngle);
+    //G4Tubs is the class that forms cylindrical /cylindrical shell objects
+    //we create a SOLID VOLUME instance as a G4Tubs object 
     G4LogicalVolume *logicVacuumTunnel = new G4LogicalVolume(solidVacuumTunnel, vacuum, "logicVacuumTunnel");
+    //we create a LOGICAL VOLUME instance from the G4LogicalVolume class
+    //a LOGICAL VOLUME requires a SOLID VOLUME for its geometry, and a material for is composition
     G4VPhysicalVolume *physVacuumTunnel = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicVacuumTunnel, "physVacuumTunnel",
         logicWorld, false, 0, true);
+    //we create a PHYSICAL VOLUME instance using the G4PVPlacement class
+    //a PHYSICAL VOLUME is a LOGICAL VOLUME that has been placed inside of the overall simulation geometry
     
     //Define Concrete plug
     outerRadius = RTunnel;
@@ -154,6 +165,10 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
 void MyDetectorConstruction::ConstructSDandField()
 {
+    //this method defines sensitive detectors (SD) and electromagnetic fields if present (no EM fields in this simulation)
+    //2 detectors are defined here: the Li target itself, and the actual neutron detector
+
+
     //Define the target itself as a detector to determine information directly from the reactions
     MySensitiveDetector *targetDet = new MySensitiveDetector("TargetDetector");
     logicTarget->SetSensitiveDetector(targetDet);

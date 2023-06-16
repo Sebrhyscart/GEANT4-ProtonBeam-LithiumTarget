@@ -2,14 +2,7 @@
 #include "G4Threading.hh" 
 
 MyRunAction::MyRunAction()
-{   
-    /*
-    std::ofstream myfile;
-    myfile.open("neutronData.csv");
-    myfile << "EventID,Particle,Energy1 [MeV],Energy2 [MeV],EndProcess\n";
-    myfile.close();
-    */
-}
+{}
 
 MyRunAction::~MyRunAction()
 {}
@@ -17,64 +10,23 @@ MyRunAction::~MyRunAction()
 void MyRunAction::BeginOfRunAction(const G4Run*)
 {
   /*
+    G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable(); //get the GEANT4 table of default particles
+    G4String particleName = "proton"; //the name of the particle needed
+    const G4ParticleDefinition *particle = particleTable->FindParticle(particleName); //get the particle from the particle table
+    const G4ParticleDefinition& theProton = *particle;
+    G4CrossSectionDataStore::DumpPhysicsTable(theProton); //idk man
 
-    G4int threadID =  G4Threading::G4GetThreadId(); //get the unique thread ID to open the output file for this specific thread
-    std::string strthread = std::to_string(threadID); //use normal c++ string and file IO notation since I couldn't figure out
-    std::string fileName  = "output"; //the GEANT4 string and file IO methods :)
-    fileName.append(strthread);
-    fileName.append(".csv");
+    //G4CrossSectionDataStore::AddDataSet(theData) //?? this aint the place to add xs
 
-    std::ofstream myfile; //open the file to create an instance of it
-    myfile.open(fileName); 
-    myfile.close();
-
-
-
-  const MyRun* theRun = static_cast<const MyRun*>aRun;
-  if(IsWorker()) {
-    G4String threadID = G4Threading::G4GetThreadId();
-
-    std::ofstream myfile;
-    G4Sting fileName = "Output" + threadID + ".csv";
-    myfile.open(fileName);
-    myfile.close();
-
-  }
+    //G4CrossSectionDataStore::BuildPhysicsTable(theProton); //No instance of G4CrossSectionDataStore object at this point :(
+    //G4CrossSectionDataStore::DumpPhysicsTable(theProton); //idk man
   */
-  
-  
-  
-  //OR
-  //if worker thread, 
-  //get thread ID
-  //open a csv file with thread ID in the name 
-  //then each thread can write to its own file
-}
 
+  //re-create the .csv files (so they start each run as EMPTY (since other parts of code only append))
+}
 void MyRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  /*
-  const MyRun* theRun = static_cast<const MyRun*>aRun;
-  if(IsMaster())
-  {
-    //write all results from the hits to the file
-    std::ofstream myfile;
-    myfile.open("neutronData.csv");
-    for loop {
-      if neutron BS
-      add the data one line at a time :)
-    }
+  //move the python post processing script in here maybe
 
-
-
-
-    G4cout << "Global result with " << theRun->GetNumberOfEvent()
-           << " events : " << theRun->GetTotalEDep()/GeV << " [GeV]" << G4endl;
-  } else {
-    
-    //
-    G4cout << "Local thread result with " << theRun->GetNumberOfEvent()
-           << " events : " << theRun->GetTotalEDep()/GeV << " [GeV]" << G4endl;
-  }
-  */
+  //numProton = getNumEventsProcessed()
 }
