@@ -1,8 +1,6 @@
 # Proton beam accelerator in to Lithium target GEANT4
 Simulation based on an experiment performed at the McMaster Tandetron Accelerator
 
-The simulation is Part One of a new lab for the course ENGPHYS 4PP3: Applications of Plasma Physics. The purpose of the lab and simulation is to experimentally
-determine the neutron production cross section for the Proton - Lithium nuclear reaction.
+This simulation is part one of a new lab for the courese ENGPHYS 4PP3: Applications of Plasma Physics offered at McMaster University. The purpose of this lab is to determine the Li7(p,n)Be7 cross section. This is done by shooting a proton beam at a Lithium target, and determining the number of time this nuclear reaction occurs.
 
-The simulation is written in C++ for the Monte Carlo particle transport code GEANT4, developed by CERN. The simulation creates several output.csv files, which 
-must be read by the file xsCalculator.py
+This simulation is written in C++ for the Monte Carlo particle trasport code GEANT4, developed at CERN.
