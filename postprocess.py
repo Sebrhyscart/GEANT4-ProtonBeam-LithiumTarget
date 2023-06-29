@@ -12,7 +12,7 @@ def extractData(fileName):
             i = 0
             for row in particleData:
                 if (i > 0):
-                    evt  = int(row[0])
+                    evt = int(row[0])
                     particle = str(row[1])
 
                     while (evt > len(evtList)):
@@ -20,9 +20,6 @@ def extractData(fileName):
                     
                     if ((evt == len(evtList)) and (particle == "neutron")):
                         evtList.append(True)
-
-                    elif (evt < len(evtList)):
-                        raise Exception("Error in data extraction, trying to analyze prior event number \nThis event number should have already been processed")
 
                 i += 1
 
@@ -52,9 +49,6 @@ def extractData(fileName):
                     
                     if ((evt == len(evtList)) and (particle == "neutron")):
                         evtList.append(True)
-
-                    elif (evt < len(evtList)):
-                        raise Exception("Error in data extraction, trying to analyze prior event number \nThis event number should have already been processed")
 
                 i += 1
 
