@@ -1,12 +1,6 @@
 #include "runaction.hh"
 #include "G4Threading.hh" 
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <cmath>
-
 MyRunAction::MyRunAction()
 {}
 
@@ -15,7 +9,7 @@ MyRunAction::~MyRunAction()
 
 void MyRunAction::BeginOfRunAction(const G4Run*)
 {
-    if (!G4Threading::IsWorkerThread()) {
+    if (!G4Threading::IsWorkerThread()) { //this should only be executed by the master thread, the one thread to rule them all
         G4int numThreads = G4Threading::G4GetNumberOfCores();
 
         for (G4int threadID=0; threadID < numThreads; threadID++) {
@@ -36,10 +30,13 @@ void MyRunAction::BeginOfRunAction(const G4Run*)
 }
 
 void MyRunAction::EndOfRunAction(const G4Run* aRun)
+{}
+/*
+void MyRunAction::EndOfRunAction(const G4Run* aRun)
 { 
-    if (!G4Threading::IsWorkerThread()) { //this should only be executed by the master thread, the one thread to rule them all
+    if (!G4Threading::IsWorkerThread()) { 
 
-        G4int nofEvents = 1000000; 
+        G4int nofEvents = 100000000; 
         //G4int nofEvent = aRun->GetNumberOfEvent();
 
         G4int numNeutron = 0;
@@ -85,7 +82,6 @@ void MyRunAction::EndOfRunAction(const G4Run* aRun)
 
                 if (evtVec.at(j)) {
                     numNthread++;
-                    G4cout << "beep boop neutron detected" << G4endl;
                 }
             }
 
@@ -116,3 +112,4 @@ void MyRunAction::EndOfRunAction(const G4Run* aRun)
         xsfile.close(); 
     }
 }
+*/

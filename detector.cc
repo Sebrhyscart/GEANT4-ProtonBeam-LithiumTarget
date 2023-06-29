@@ -5,10 +5,7 @@
 #include <sstream>
 
 MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name)
-{
-    //G4cout << "Creating SD with name: " << name << G4endl;
-    //collectionName.insert("TargetHitsCollection");
-}
+{}
 
 MySensitiveDetector::~MySensitiveDetector()
 {}

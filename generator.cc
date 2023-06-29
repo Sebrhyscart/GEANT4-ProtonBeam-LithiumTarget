@@ -27,7 +27,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 
     fParticleGun->SetParticlePosition(pos); //set the beam source position 
     fParticleGun->SetParticleMomentumDirection(mom); //set the beam direction
-    fParticleGun->SetParticleEnergy(2*MeV); //set the energy of each particle
+    //fParticleGun->SetParticleEnergy(2*MeV); //set the energy of each particle
     fParticleGun->SetParticleDefinition(particle); //set the particle type to the particle definition object above
 
     fParticleGun->GeneratePrimaryVertex(anEvent); //define a single GEANT4 event to be the transport of a single particle

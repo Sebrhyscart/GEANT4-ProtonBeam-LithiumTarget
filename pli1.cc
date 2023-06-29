@@ -2,7 +2,7 @@
 
 #include "G4RunManager.hh" //import header files needed to run GEANT4
 #include "G4MTRunManager.hh" 
-#include "G4UIManager.hh"
+#include "G4UImanager.hh" //#include "G4UIManager.hh" 
 #include "G4VisManager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -28,12 +28,13 @@ int main(int argc, char** argv)
 
     if (RunWithNoVis) {
         G4int numThreads  = 12;
+        runManager->SetNumberOfThreads(numThreads); //set the simulation to use 12 threads
     }
     else {
         G4int numThreads = G4Threading::G4GetNumberOfCores(); //get the number of available cores on this computer
+        runManager->SetNumberOfThreads(numThreads); //set the simulation to use the ideal number of threads
     }
 
-    runManager->SetNumberOfThreads(numThreads); //set the simulation to use the ideal number of threads
     runManager->Initialize(); //initilize the RunManager
 
     if (RunWithNoVis) {
@@ -71,6 +72,8 @@ int main(int argc, char** argv)
         G4cout << "======================================================================================================"          << G4endl;
         G4cout << "                  Geant4 Simulation Written by Sebastian Carter and Jadyn Yaroshuk"                              << G4endl;
 
+        ui->SessionStart(); //Start the interactive UI
+
     }
     else {
         //initilize UI
@@ -84,7 +87,7 @@ int main(int argc, char** argv)
         //initilize UI with commands 
         UImanager->ApplyCommand("/process/had/particle_hp/skip_missing_isotopes true");
         UImanager->ApplyCommand("/process/had/particle_hp/do_not_adjust_final_state true");
-
+        /*
         UImanager->ApplyCommand("/vis/open OGL"); //open the geometry viewer window
         UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 0.2 0.2"); //set the perspective
         UImanager->ApplyCommand("/vis/drawVolume"); //draw the simulation geometryS
@@ -93,7 +96,7 @@ int main(int argc, char** argv)
         UImanager->ApplyCommand("/vis/scene/endOfEventAction accumulate -1"); //accumulate all events before displaying
         UImanager->ApplyCommand("/vis/multithreading/maxEventQueueSize -1"); //queue all events
         UImanager->ApplyCommand("/vis/modeling/trajectories/create/drawByParticleID true"); //draw trajectories in colour by particle type
-
+        */
         //print ASCII art!
         G4cout << "                                                                  ~"                                             << G4endl;
         G4cout << "                                                               -`"                                               << G4endl;
@@ -119,8 +122,8 @@ int main(int argc, char** argv)
         G4cout << "======================================================================================================"          << G4endl;
         G4cout << "======================================================================================================"          << G4endl;
         G4cout << "                  Geant4 Simulation Written by Sebastian Carter and Jadyn Yaroshuk"                              << G4endl;
-    }
 
-    ui->SessionStart(); //Start the interactive UI
+        ui->SessionStart(); //Start the interactive UI
+    }
     return 0;
 }
