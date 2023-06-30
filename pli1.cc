@@ -20,7 +20,7 @@ int main(int argc, char** argv)
         G4RunManager *runManager = new G4RunManager();
     #endif
 
-    G4bool RunWithNoVis = false; //set this to true to run on Dr. Buijs' computer
+    G4bool RunWithNoVis = true; //set this to true to run on Dr. Buijs' computer
 
     runManager->SetUserInitialization(new MyDetectorConstruction()); //initilize Geometry
     runManager->SetUserInitialization(new MyPhysicsList()); //initilaize physics (electromagnetic)
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
         //initilize UI with commands 
         UImanager->ApplyCommand("/process/had/particle_hp/skip_missing_isotopes true");
         UImanager->ApplyCommand("/process/had/particle_hp/do_not_adjust_final_state true");
-        /*
+
         UImanager->ApplyCommand("/vis/open OGL"); //open the geometry viewer window
         UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 0.2 0.2"); //set the perspective
         UImanager->ApplyCommand("/vis/drawVolume"); //draw the simulation geometryS
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
         UImanager->ApplyCommand("/vis/scene/endOfEventAction accumulate -1"); //accumulate all events before displaying
         UImanager->ApplyCommand("/vis/multithreading/maxEventQueueSize -1"); //queue all events
         UImanager->ApplyCommand("/vis/modeling/trajectories/create/drawByParticleID true"); //draw trajectories in colour by particle type
-        */
+
         //print ASCII art!
         G4cout << "                                                                  ~"                                             << G4endl;
         G4cout << "                                                               -`"                                               << G4endl;

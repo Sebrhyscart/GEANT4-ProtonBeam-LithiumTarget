@@ -10,7 +10,7 @@ MyRunAction::~MyRunAction()
 void MyRunAction::BeginOfRunAction(const G4Run*)
 {
     if (!G4Threading::IsWorkerThread()) { //this should only be executed by the master thread, the one thread to rule them all
-        G4int numThreads = G4Threading::G4GetNumberOfCores();
+        G4int numThreads = 12; //G4Threading::G4GetNumberOfCores();
 
         for (G4int threadID=0; threadID < numThreads; threadID++) {
 

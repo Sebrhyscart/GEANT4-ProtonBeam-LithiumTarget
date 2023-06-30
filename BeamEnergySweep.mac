@@ -1,27 +1,24 @@
-/gun/energy 1.7 MeV
-/run/beamOn 100000000
-/control/shell python3 xsCalculator.py
 /gun/energy 1.8 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
 /gun/energy 1.9 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
 /gun/energy 2 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
 /gun/energy 2.1 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
 /gun/energy 2.2 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
 /gun/energy 2.3 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
 /gun/energy 2.4 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
 /gun/energy 2.5 MeV
-/run/beamOn 100000000
+/run/beamOn 1000000000
 /control/shell python3 xsCalculator.py
