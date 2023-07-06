@@ -1,24 +1,32 @@
+/control/shell ./clearfiles.sh
 /gun/energy 1.8 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 1.8 0.1
+/control/shell ./clearfiles.sh
 /gun/energy 1.9 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 1.9 0.1
+/control/shell ./clearfiles.sh
 /gun/energy 2 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 2 0.1
+/control/shell ./clearfiles.sh
 /gun/energy 2.1 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 2.1 0.1
+/control/shell ./clearfiles.sh
 /gun/energy 2.2 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 2.2 0.1
+/control/shell ./clearfiles.sh
 /gun/energy 2.3 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 2.3 0.1
+/control/shell ./clearfiles.sh
 /gun/energy 2.4 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 2.4 0.1
+/control/shell ./clearfiles.sh
 /gun/energy 2.5 MeV
 /run/beamOn 1000000000
-/control/shell python3 xsCalculator.py
+/control/shell python3 xsCalculator_numP_beamE_thick.py 1000000000 2.5 0.1

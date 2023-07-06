@@ -19,6 +19,11 @@ file(GLOB PYTHON_FILES
 )
 file(COPY ${PYTHON_FILES} DESTINATION ${PROJECT_BINARY_DIR})
 
+file(GLOB BASH_FILES
+	"*.sh"
+)
+file(COPY ${BASH_FILES} DESTINATION ${PROJECT_BINARY_DIR})
+
 add_executable(pli1 pli1.cc ${sources} ${headers})
 target_link_libraries(pli1 ${Geant4_LIBRARIES})
 
