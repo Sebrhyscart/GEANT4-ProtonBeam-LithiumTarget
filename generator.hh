@@ -5,6 +5,8 @@
 #include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
+#include <CLHEP/Random/Randomize.h>
+#include <cmath>
 
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {

@@ -1,9 +1,5 @@
 #include "detector.hh"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name)
 {}
 
@@ -12,41 +8,60 @@ MySensitiveDetector::~MySensitiveDetector()
 
 G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *R0hist)
 {
+    //this function is called for each step in each track in this event, and will collect information about each step
     //everything in the SensitiveDetector is thread-local
+
+    //=========================================================================================================
+    //set this to true to speed up the simulation by removing all non-strictly-necessary particles
+    G4bool KillAllParticlesThatArentProtonsOrNeutrons = false;
+    //=========================================================================================================
+
     G4Track *track = aStep->GetTrack(); //Get particle track
-    
+
     G4ParticleDefinition *particle = track->GetDefinition(); //Get particle definition from the track
     G4String particleName = particle->GetParticleName(); //Get name of particle
 
     if (particleName == "neutron") {
-    
-        const G4StepPoint *preStepPoint = aStep->GetPreStepPoint(); //Get point before step
-
-        const G4StepPoint *postStepPoint = aStep->GetPostStepPoint(); //Get point after step
-        const G4VProcess *postProcess = postStepPoint->GetProcessDefinedStep(); //Get the process/reaction that occured to end the step
-        G4String postProcessName = postProcess->GetProcessName(); //Get the process name
-
-        G4double energy1 = preStepPoint->GetKineticEnergy(); //kinetic energy before step
-        G4double energy2 = postStepPoint->GetKineticEnergy(); //kinetic energy after step
-
         G4int evt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID(); 
-        //returns the RunManager for the the worker thread, event ID belongs to worker thread    
-        
-        G4int threadID =  G4Threading::G4GetThreadId(); //get the unique thread ID to open the output file for this specific thread
-        std::string strthread = std::to_string(threadID); //use normal c++ string and file IO notation since I couldn't figure out
-        std::string fileName  = "output"; //the GEANT4 string and file IO methods :)
-        fileName.append(strthread);
-        //append the name of the detector to the filename too once there are multiple detectors
-        fileName.append(".csv");
+        //returns the RunManager for the the worker thread, event ID belongs to worker thread
 
-        std::ofstream myfile; //open the .csv file in append mode
-        myfile.open(fileName, std::ios::out | std::ios::app);
+        const G4StepPoint *preStepPoint = aStep->GetPreStepPoint(); //Get point before step
+        const G4StepPoint *postStepPoint = aStep->GetPostStepPoint(); //Get point after step
 
+        G4double preStepEnergy = preStepPoint->GetKineticEnergy(); //kinetic energy before step
+        G4double postStepEnergy = postStepPoint->GetKineticEnergy(); //kinetic energy after step  
 
-        myfile << evt << "," << particleName << "," << energy1 << "," << energy2 << "," << postProcessName << std::endl; //write out the collected data
-        
-        myfile.close();    
+        G4ThreeVector posNeutron = preStepPoint->GetPosition(); //get neutron position before step
+
+        G4String regionName = preStepPoint->GetTouchable()->GetVolume()->GetName(); //get the name of the region the neutron is detected in
+
+        if (regionName == "physTarget") { //was the neutron detected in the target?
+            //write all of the collected information to the Target file
+            G4AnalysisManager *man = G4AnalysisManager::Instance();
+
+            man->FillNtupleIColumn(0, 0, evt);
+            man->FillNtupleDColumn(0, 1, preStepEnergy);
+            man->FillNtupleDColumn(0, 2, postStepEnergy);
+            man->FillNtupleDColumn(0, 3, posNeutron[0]);
+            man->FillNtupleDColumn(0, 4, posNeutron[1]);
+            man->FillNtupleDColumn(0, 5, posNeutron[2]);
+            man->AddNtupleRow(0);
+        }
+        else if (regionName == "physDetector") {//or was the neutron detected in the BF3 detector
+            //write all of the collected information to the Detector file
+            G4AnalysisManager *man = G4AnalysisManager::Instance();
+
+            man->FillNtupleIColumn(1, 0, evt);
+            man->FillNtupleDColumn(1, 1, preStepEnergy);
+            man->FillNtupleDColumn(1, 2, postStepEnergy);
+            man->FillNtupleDColumn(1, 3, posNeutron[0]);
+            man->FillNtupleDColumn(1, 4, posNeutron[1]);
+            man->FillNtupleDColumn(1, 5, posNeutron[2]);
+            man->AddNtupleRow(1);
+        }
     }
-
+    else if ((particleName != "proton") && (KillAllParticlesThatArentProtonsOrNeutrons)) {
+        track->SetTrackStatus(fStopAndKill);
+    }
     return true;
 }

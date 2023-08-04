@@ -23,7 +23,7 @@ class MyDetectorConstruction : public G4VUserDetectorConstruction
     
     private:
         G4LogicalVolume *logicTarget;
-        //G4LogicalVolume *logicDetector;
+        G4LogicalVolume *logicDetector;
         virtual void ConstructSDandField();
     
 };

@@ -1,115 +1,100 @@
 #include "runaction.hh"
-#include "G4Threading.hh" 
+#include <fstream>
 
 MyRunAction::MyRunAction()
-{}
+{
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+
+    //Tally neutrons produced in Li target
+    man->CreateNtuple("Target", "Target");
+    man->CreateNtupleIColumn("fEvent");
+    man->CreateNtupleDColumn("PreStepEnergy");
+    man->CreateNtupleDColumn("PostStepEnergy");
+    man->CreateNtupleDColumn("fX");
+    man->CreateNtupleDColumn("fY");
+    man->CreateNtupleDColumn("fZ");
+    man->FinishNtuple(0);
+
+    //Tally neutrons in the detector
+    man->CreateNtuple("Detector", "Detector");
+    man->CreateNtupleIColumn("fEvent");
+    man->CreateNtupleDColumn("PreStepEnergy");
+    man->CreateNtupleDColumn("PostStepEnergy");
+    man->CreateNtupleDColumn("fX");
+    man->CreateNtupleDColumn("fY");
+    man->CreateNtupleDColumn("fZ");
+    man->FinishNtuple(1);
+}
 
 MyRunAction::~MyRunAction()
 {}
 
 void MyRunAction::BeginOfRunAction(const G4Run*)
 {
-    if (!G4Threading::IsWorkerThread()) { //this should only be executed by the master thread, the one thread to rule them all
-        G4int numThreads = 12; //G4Threading::G4GetNumberOfCores();
-
-        for (G4int threadID=0; threadID < numThreads; threadID++) {
-
-            std::string strthread = std::to_string(threadID);
-            std::string fileName  = "output";
-            fileName.append(strthread);
-            fileName.append(".csv");
-
-            std::ofstream myfile; 
-            myfile.open(fileName);
-
-            myfile << "Event Number,Particle Name,Energy 1 (MeV),Energy 2 (MeV),Stopping Process" << std::endl; 
-
-            myfile.close();
-        }
-    }
+    //create the output files for this run
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+    man->OpenFile("output.csv");
 }
 
-void MyRunAction::EndOfRunAction(const G4Run* aRun)
-{}
-/*
-void MyRunAction::EndOfRunAction(const G4Run* aRun)
-{ 
-    if (!G4Threading::IsWorkerThread()) { 
+void MyRunAction::EndOfRunAction(const G4Run*)
+{
+    //write out data collected in this run
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+    man->Write();
+    man->CloseFile();
 
-        G4int nofEvents = 100000000; 
-        //G4int nofEvent = aRun->GetNumberOfEvent();
+    
+    //read the files to determine the number of neutrons
+    if (G4Threading::IsMasterThread())
+    {
+        G4cout << "------------------- Run Complete -------------------" << G4endl;
 
-        G4int numNeutron = 0;
-        G4int numThreads = G4Threading::G4GetNumberOfCores(); 
+        G4int numTargetNeutrons = 0;
+        G4int numDetectorNeutrons = 0;
 
-        for (G4int threadID=0; threadID < numThreads; threadID++) { //for each thread:
+        G4int numTargetNeutronsInThread = 0;
+        G4int numDetectorNeutronsInThread = 0;
 
-            std::string strthread = std::to_string(threadID);
-            std::string fileName  = "output"; //find the output file that this thread has produced
-            fileName.append(strthread);
-            fileName.append(".csv");        
+        for (G4int i=0; i<G4Threading::GetNumberOfRunningWorkerThreads(); i++)
+        {
+            std::stringstream strThreadID;
+            strThreadID << i;
+            G4String targetFileName = "output_nt_Target_t" + strThreadID.str() + ".csv";
+            G4String detectorFileName = "output_nt_Detector_t" + strThreadID.str() + ".csv";
 
-            std::ifstream csvfile(fileName); //open the output file
-            std::vector<bool> evtVec; //vector of bools -> whether the event at index i happened in this thread
-            std::string line;
+            numTargetNeutronsInThread = 0;
 
-            evtVec.push_back(false);
-
-            getline(csvfile, line); //line of column names
-
-            //G4cout << line << G4endl;
-
-            while (getline(csvfile, line)) { //while there is still data on the current line of the file:
-
-                int evt = std::stoi(line.substr(0, line.find(','))); //get the event number as the first column entry
-
-                line.erase(0,line.find(',') + 1);
-
-                G4String particle = line.substr(0, line.find(',')); //get the particle name as the second column entry
-
-                while (evt > evtVec.size()) {
-                    evtVec.push_back(false);
-                }
-
-                if (evt == evtVec.size()) { //if the vector is filled up to but not including event evt,
-                    evtVec.push_back(true); //include the event as the evt'th element
-                }
-
+            G4String targetLine;
+            std::ifstream targetFile(targetFileName);
+            for (G4int j = 0; j < 10; j++) //reads throught the first 10 lines of comments
+            {
+                getline(targetFile, targetLine);
+            }
+            while (getline(targetFile, targetLine))
+            {
+                numTargetNeutronsInThread += 1;
             }
 
-            G4int numNthread = 0; 
-            for (int j = 0; j < evtVec.size(); j++) {
+            numDetectorNeutronsInThread = 0;
 
-                if (evtVec.at(j)) {
-                    numNthread++;
-                }
+            G4String detectorLine;
+            std::ifstream detectorFile(detectorFileName);
+            for (G4int j = 0; j < 10; j++) //reads throught the first 10 lines of comments
+            {
+                getline(detectorFile, targetLine);
             }
 
-            numNeutron += numNthread;
+            while (getline(detectorFile, targetLine))
+            {
+                numDetectorNeutronsInThread += 1;
+            }
+            
+            numTargetNeutrons += numTargetNeutronsInThread;
+            numDetectorNeutrons += numDetectorNeutronsInThread;
         }
 
-        G4int numProton = nofEvents;
-
-        G4double thickness = 0.2; //get thickness //cm
-        G4double targetAtomicDensity = ((0.534 / 6.94) * 6.02214076e23); //(0.534 g/cm3) * ((1/6.94) mol/g) * (6.022e23 atoms/mol) //atoms/cm3
-
-        G4double xsMicro = (numNeutron / (numProton * thickness * targetAtomicDensity)) * 1e26 ; //b
-
-        //G4double beamEnergy = MyPrimaryGenerator::fPrimary->GetParticleGun()->GetParticleEnergy(); //get beam energy from the particle gun //MeV
-        //G4double beamEnergy = G4ParticleGun::GetParticleEnergy();
-        G4double beamEnergy = 2; //MeV
-
-        G4double stdDev = 1/sqrt(nofEvents); //the standard deviation of a monte carlo method is ~1/sqrt(# of computations)
-        
-        //write calculated xs to a final file
-        G4String xsFileName = "finalXSfile.csv";
-
-        std::ofstream xsfile; //open the .csv file in append mode
-        xsfile.open(xsFileName, std::ios::out | std::ios::app);
-
-        xsfile << beamEnergy << "," << xsMicro << "," << stdDev << std::endl; //write out beam Energy (MeV), xs (b), and standard deviation
-
-        xsfile.close(); 
+        G4cout << "Total number of Neutrons produced in target: " << numTargetNeutrons << G4endl;
+        G4cout << "Total number of Neutrons reaching the detector: " << numDetectorNeutrons << G4endl;
+        G4cout << "----------------------------------------------------" << G4endl;
     }
 }
-*/

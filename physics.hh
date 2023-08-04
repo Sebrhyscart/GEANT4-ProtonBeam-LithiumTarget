@@ -7,10 +7,6 @@
 #include "G4DecayPhysics.hh"
 #include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
 
-#include "G4ParticleTable.hh"
-#include "G4VCrossSectionDataSet.hh" //i dont think this works (abstract class -> cant use it here)
-#include "G4CrossSectionDataStore.hh"
-
 class MyPhysicsList : public G4VModularPhysicsList
 {
     public:

@@ -6,7 +6,9 @@
 
 #include "G4UserRunAction.hh"
 #include "G4AnalysisManager.hh"
+#include "G4RootAnalysisManager.hh"
 #include "G4RunManager.hh"
+#include "G4Threading.hh"
 
 class MyRunAction : public G4UserRunAction
 {
