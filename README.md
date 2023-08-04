@@ -3,7 +3,7 @@ This simulation models a fixed target experiment using a particle accelerator an
 
 This simulation is written in C++ with the Monte Carlo particle trasport code GEANT4, developed at CERN.
 
-The simulation uses a random number generator and experimentally-determined probabiliy distributions to compute the trajectories and interations of sub-atomic particles. Below is an example trajectory visual of the simulated particle accelerator. 
+The simulation uses a random number generator and experimentally-determined probability distributions to compute the trajectories and interations of sub-atomic particles. Below is an example trajectory visual of the simulated particle accelerator. 
 
 ![image](https://github.com/Sebrhyscart/GEANT4-ProtonBeam-LithiumTarget/assets/133667593/d15c8abd-47a9-4f7d-8b3d-aa974da8433e)
 
