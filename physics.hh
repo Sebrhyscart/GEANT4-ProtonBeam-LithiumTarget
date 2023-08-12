@@ -7,11 +7,12 @@
 #include "G4DecayPhysics.hh"
 #include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
 
+//create a Physics List class, inheriting from GEANT4's generic Physics List Class
 class MyPhysicsList : public G4VModularPhysicsList
 {
     public:
-        MyPhysicsList();
-        ~MyPhysicsList();
+        MyPhysicsList(); //constructor
+        ~MyPhysicsList(); //destructor
 };
 
 #endif

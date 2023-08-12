@@ -24,12 +24,12 @@ int main(int argc, char** argv)
         visManager->Initialize();
 
         //initilize UI with commands 
-        UImanager->ApplyCommand("/process/had/particle_hp/skip_missing_isotopes true");
+        //UImanager->ApplyCommand("/process/had/particle_hp/skip_missing_isotopes true");
         UImanager->ApplyCommand("/process/had/particle_hp/do_not_adjust_final_state true");
 
         UImanager->ApplyCommand("/vis/open OGL"); //open the geometry viewer window
         UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 0.2 0.2"); //set the perspective
-        UImanager->ApplyCommand("/vis/drawVolume"); //draw the simulation geometryS
+        UImanager->ApplyCommand("/vis/drawVolume"); //draw the simulation geometry
         UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true"); //autorefresh viewer
         UImanager->ApplyCommand("/vis/scene/add/trajectories"); //draw particle trajectories
         UImanager->ApplyCommand("/vis/scene/endOfEventAction accumulate -1"); //accumulate all events before displaying
@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     else
     {
         //initilize UI with some commands
-        UImanager->ApplyCommand("/process/had/particle_hp/skip_missing_isotopes true");
+        //UImanager->ApplyCommand("/process/had/particle_hp/skip_missing_isotopes true");
         UImanager->ApplyCommand("/process/had/particle_hp/do_not_adjust_final_state true");
     }
 

@@ -12,20 +12,20 @@
 
 #include "detector.hh"
 
-
+//create a new Geometry Construction class, inheriting from GEANT4's generic Geometry Construction class
+//** this class is called Detector Construction, but all of the geometry is constructed within
 class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
-        MyDetectorConstruction();
-        ~MyDetectorConstruction();
+        MyDetectorConstruction(); //constructor
+        ~MyDetectorConstruction(); //destructor
 
-        virtual G4VPhysicalVolume *Construct();
+        virtual G4VPhysicalVolume *Construct(); //function to define and construct all of the geometry in the simulation
     
     private:
-        G4LogicalVolume *logicTarget;
-        G4LogicalVolume *logicDetector;
-        virtual void ConstructSDandField();
-    
+        G4LogicalVolume *logicTarget; //attribute to hold a pointer to the first Sensitive Detector, the Li target
+        G4LogicalVolume *logicDetector; //attribute to hold a pointer to the 2nd Sensitive Detector, the BF3 detector
+        virtual void ConstructSDandField(); //function to define the Sensitive Detectors
 };
 
 #endif

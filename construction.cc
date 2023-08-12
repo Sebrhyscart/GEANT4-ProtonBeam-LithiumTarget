@@ -1,18 +1,20 @@
 #include "construction.hh"
 
 MyDetectorConstruction::MyDetectorConstruction()
-{} 
+{}  //constructor
 
 MyDetectorConstruction::~MyDetectorConstruction()
-{}
+{}  //destructor
 
 G4VPhysicalVolume *MyDetectorConstruction::Construct()
 {
-    //this method defines all of the materials and geometry in the simulation
+    //=========================================================================================================================
+    //this function defines all of the materials and geometry in the simulation
     //1, materials and their properties are defined
     //2, the geometry is defined, and materials assigned to the geometry
+    //=========================================================================================================================
 
-    //=================================================================================================================================
+    //=========================================================================================================================
     //DEFINE MATERIALS
     G4NistManager *nist = G4NistManager::Instance(); //get materials manager
 
@@ -30,7 +32,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4Material *concrete = nist->FindOrBuildMaterial("G4_CONCRETE"); //Concrete -> Sheilding
     G4Material *wax = nist->FindOrBuildMaterial("G4_PARAFFIN"); //Paraffin wax -> Sheilding behind detector
     
-    //=================================================================================================================================
+    //=========================================================================================================================
     //DEFINE GEOMETRY PARAMTERS
     //length and thickness parameters
     G4double LWorld = 1.31*m; //all simulation happens within this cubic universe
@@ -74,7 +76,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4double zBrass = LCube - zLBrass - (dzBrass / 2);
     G4double zTarget = LCube - zLTarget - (dzTarget / 2);
 
-    //center of each solid's positions in 3D space (w. respect to the origin)
+        //center of each solid's positions in 3D space (w. respect to the origin)
     G4ThreeVector xyzBox(0., 0., -(LWorld - LCube));
 
     G4ThreeVector xyzConcrete(0., 0., zConcrete);
@@ -87,7 +89,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     G4ThreeVector xyzDetector(0., 0., LCube + Rdetector + dRdetectorSheath -(LWorld - LCube) + 2*cm);
 
-    //=================================================================================================================================
+    //=========================================================================================================================
     //DEFINE GEOMETRY
 
     //Define World
