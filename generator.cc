@@ -25,9 +25,6 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     G4double LRaster = 2.5 * cm;
     G4double thetaMax = std::atan(LRaster / LToTarget);
 
-    CLHEP::HepRandom::setTheEngine(new CLHEP::MTwistEngine);
-    CLHEP::HepRandom::setTheSeed((unsigned)clock());
-
     G4double thetaX = thetaMax * (CLHEP::HepRandom::getTheEngine()->flat() - 0.5);
     G4double thetaY = thetaMax * (CLHEP::HepRandom::getTheEngine()->flat() - 0.5);
 

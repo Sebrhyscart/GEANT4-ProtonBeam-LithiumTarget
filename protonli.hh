@@ -16,8 +16,8 @@
 #include "action.hh"
 
 //simulation parameters
-extern G4bool runWithVis = true; //run with the visualization window initilized
-extern G4int NumThreads = 12; //the number of threads the program should use
+G4bool runWithVis = true; //run with the visualization window initilized
+G4int NumThreads = 12; //the number of threads the program should use
 //extern G4int NumThreads = G4Threading::G4GetNumberOfCores(); //this sets the optimum number of threads based on the number of cores in the computer
 
 #endif
