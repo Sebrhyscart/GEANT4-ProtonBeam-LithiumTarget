@@ -1,4 +1,4 @@
-# Proton beam - Lithium Target Fixed Target Experiment with GEANT4
+# Proton Beam - Lithium Target Fixed Target Experiment with GEANT4
 ### Overview
 This simulation models a fixed target experiment using a particle accelerator and a neutron detector. The simulation fires a beam of monoenergetic protons at a desired energy into a Lithium target and models all secondary particles produced by nuclear reactions occuring within the target. The primary reaction of interest is Li7(p,n)Be7, by which neutrons are produced in the target by incident protons. The simulation records and reports the number of neutrons present in both the target and detector over the course of the simulation.
 
