@@ -27,31 +27,45 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4Material *brass = nist->FindOrBuildMaterial("G4_BRASS"); //Brass -> Target holder
     G4Material *aluminum = nist->FindOrBuildMaterial("G4_Al"); //Aluminum -> BF3 detector sheath
     G4Material *polyethylene = nist->FindOrBuildMaterial("G4_POLYETHYLENE"); //Polyethylene -> Shielding plug
+    G4Material* polyvinylAlcohol = nist->FindOrBuildMaterial("G4_POLYVINYL_ALCOHOL"); //Resin ->cookies and cream sheilding
     G4Material *lead = nist->FindOrBuildMaterial("G4_Pb"); //Lead -> Shielding plug
     G4Material *graphite = nist->FindOrBuildMaterial("G4_GRAPHITE"); //Graphite -> Sheilding plug
     G4Material *concrete = nist->FindOrBuildMaterial("G4_CONCRETE"); //Concrete -> Sheilding
     G4Material *wax = nist->FindOrBuildMaterial("G4_PARAFFIN"); //Paraffin wax -> Sheilding behind detector
     
+    //cookies and cream radiation sheilding -> resin filled with thousands of small graphite sphere
+    G4String name;
+    G4int ncomponents;
+    G4double fractionmass;
+    G4double rhoG = 2.21 * g / cm3; //graphite density
+    G4double rhoR = 1.3 * g / cm3; //resin density
+    G4double pf = 0.64; //packing factor - how much of a volume is filled with spheres
+    G4double cacDensity = (rhoG * pf + rhoR * (1 - pf)); //total density of cookies and cream sheilding
+
+    G4Material* cookiesandcream = new G4Material(name = "cookiesandcream", cacDensity, ncomponents = 2);
+    cookiesandcream->AddMaterial(graphite, fractionmass = ((rhoG * pf) / (rhoG * pf + rhoR * (1 - pf))));
+    cookiesandcream->AddMaterial(polyvinylAlcohol, fractionmass = ((rhoR * (1 - pf)) / (rhoG * pf + rhoR * (1 - pf))));
+
     //=========================================================================================================================
     //DEFINE GEOMETRY PARAMTERS
     //length and thickness parameters
     G4double LWorld = 1.31*m; //all simulation happens within this cubic universe
 
     G4double LCube = 1.*m; //concrete shielding cube half side length
-    G4double RTunnel = 10.*cm; //radius of access tunnel in shielding cube
+    G4double RTunnel = 13.*cm; //radius of access tunnel in shielding cube
 
     G4double RTarget = 6.*cm; //Target radius
     G4double dzTarget = 2.*mm; //Target Thickness
 
     G4double dzBrass = 2.*cm; //Brass target holder thickness
-    G4double dzPoly = 1.*cm; //Polyethylene plug thickness
+    G4double dzPoly = 3.*cm; //Polyethylene plug thickness
     G4double dzLead = 6.*cm; //Lead plug thickness
-    G4double dzGraphite1 = 10.*cm; //1st Graphite plug thickness
-    G4double dzGraphite2 = 20.*cm; //2nd Graphite plug thickness
-    G4double dzConcrete = 30.*cm; //Final concrete plug thickness
+    G4double dzGraphite1 = 15.*cm; //1st Graphite plug thickness
+    G4double dzGraphite2 = 25.*cm; //2nd Graphite plug thickness
+    G4double dzConcrete = 40.*cm; //Final concrete plug thickness
 
     G4double Ldetector = 12.*cm;
-    G4double Rdetector = 2.*cm;
+    G4double Rdetector = 2.3*cm;
     G4double dRdetectorSheath = 0.2*cm;
 
     G4double dxWax = 30.*cm;
@@ -99,7 +113,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     //Define Sheilding Box
     G4Box *solidBox = new G4Box("solidBox", LCube, LCube, LCube);
-    G4LogicalVolume *logicBox = new G4LogicalVolume(solidBox, polyethylene, "logicBox");
+    G4LogicalVolume *logicBox = new G4LogicalVolume(solidBox, cookiesandcream, "logicBox");
     G4VPhysicalVolume *physBox = new G4PVPlacement(0, xyzBox, logicBox, "physBox", logicWorld, false, 0, true);
 
     //Define the tunnel through the concrete shieling box

@@ -51,7 +51,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     //shoot the chosen particle, from the chosen position, in the chosen direction
     fParticleGun->SetParticlePosition(pos); //set the beam source position 
     fParticleGun->SetParticleMomentumDirection(mom); //set the beam direction
-    //fParticleGun->SetParticleEnergy(2*MeV); //set the energy of each particle (this can be done in the UI after running the program instead so its commented out here)
+    //fParticleGun->SetParticleEnergy(1*MeV); //set the energy of each particle (to be set in the UI)
     fParticleGun->SetParticleDefinition(particle); //set the particle type to the particle definition object above
 
     fParticleGun->GeneratePrimaryVertex(anEvent); //Shoot the particle to start this event!
