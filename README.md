@@ -9,7 +9,7 @@ The simulation geometry is shown below. Protons are fired from a source position
 
 ![sim](https://github.com/Sebrhyscart/GEANT4-ProtonBeam-LithiumTarget/assets/133667593/a24c2baa-e077-45ed-b0db-b17482cc4190)
 
-### Running the Simumlation
+### Running the Simulation
 Below is an example trajectory visual of the simulated fixed target experiment. In the visual, Light blue trajectories are Protons, Yellow trajectories are Neutrons, Green trajectories are Gamma rays, Red trajectories are electrons, and Grey trajectories are Neutrinos.
 
 ![image](https://github.com/Sebrhyscart/GEANT4-ProtonBeam-LithiumTarget/assets/133667593/d15c8abd-47a9-4f7d-8b3d-aa974da8433e)
